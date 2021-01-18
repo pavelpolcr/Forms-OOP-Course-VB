@@ -10,6 +10,10 @@ Public Class BasicCvTezsiForm
     Dim nowTime As Date
     Dim progressBarTicksToGo As Integer = 10
     Dim possibleColors As New List(Of String)
+    ''' <summary>
+    ''' Adds new colours to possibleColors list to be used to set order color. Updates ColorsComboBox.Items
+    ''' </summary>
+    ''' <param name="values">Color names as Array of strings</param>
     Public Sub AddColorChoices(values As String())
         For Each val As String In values
             possibleColors.Add(val)
@@ -18,6 +22,10 @@ Public Class BasicCvTezsiForm
         ColorsComboBox.Items.AddRange(possibleColors.ToArray)
 
     End Sub
+    ''' <summary>
+    ''' Removes colours from possibleColors list to be used to set order color. Updates ColorsComboBox.Items
+    ''' </summary>
+    ''' <param name="values"></param>
     Public Sub RemoveColorChoices(values As String())
         For Each val As String In values
             possibleColors.Remove(val)
@@ -25,7 +33,9 @@ Public Class BasicCvTezsiForm
         ColorsComboBox.Items.Clear()
         ColorsComboBox.Items.AddRange(possibleColors.ToArray)
     End Sub
-
+    ''' <summary>
+    ''' Used to update Form elements, must be called after every element change(for included elements)
+    ''' </summary>
     Public Sub UpdateForm()
         Label1.Text = "ProgressBar pobezi jeste " + progressBarTicksToGo.ToString + " s."
         Label1.Update()
@@ -64,11 +74,18 @@ Public Class BasicCvTezsiForm
         UpdateFooter()
         UpdateProgressBar()
     End Sub
+    ''' <summary>
+    ''' UpdateFooterInfo. Needs to be called every Timer Tick and on new file opening.
+    ''' </summary>
     Private Sub UpdateFooter()
         ActTimeStatusLabel.Text = "Aktualni cas: " + DateTime.Now.ToString("HH:mm:ss")
         LastFileStatusLabel.Text = lastFileOpened
     End Sub
-
+    ''' <summary>
+    ''' Handling method for all checkbox choices for Order.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub CheckBoxs_CheckStateChanged(sender As CheckBox, e As EventArgs) Handles CheckBox3.CheckStateChanged, CheckBox2.CheckStateChanged, CheckBox1.CheckStateChanged
         Select Case sender.Checked
             Case 1
@@ -104,7 +121,11 @@ Public Class BasicCvTezsiForm
         ActOrder.colorChoice = sender.Text
         UpdateForm()
     End Sub
-
+    ''' <summary>
+    ''' Opens new file, stores filename to lastFileOpened, the text from file to FileObsTExtBox.Text
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub OtevritToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OtevritToolStripMenuItem.Click
         Dim dialResult As DialogResult
         dialResult = OpenFileDialog1.ShowDialog()
@@ -121,6 +142,11 @@ Public Class BasicCvTezsiForm
             End Try
         End If
     End Sub
+    ''' <summary>
+    ''' Save text from FileObsTExtBox.Text to chosen file.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub UlozitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UlozitToolStripMenuItem.Click
         Dim dialResult As DialogResult
         dialResult = SaveFileDialog1.ShowDialog
